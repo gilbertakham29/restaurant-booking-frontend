@@ -17,7 +17,6 @@ import {
 } from "@mui/material";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
-interface BookingFormProps {}
 
 interface BookingData {
   date: Date;
@@ -26,7 +25,7 @@ interface BookingData {
   name: string;
   contact: string;
 }
-const BookingForm: React.FC<BookingFormProps> = () => {
+const BookingForm = () => {
   const [isMounted, setIsMounted] = useState(false);
   const [date, setDate] = useState<Date | null>(null);
   const [time, setTime] = useState<string>("");
@@ -128,7 +127,7 @@ const BookingForm: React.FC<BookingFormProps> = () => {
                 sx={{ width: "100%" }}
                 onChange={(newDate) => setDate(newDate)}
                 slots={{
-                  textField: (params: any) => <TextField {...params} />,
+                  textField: (params) => <TextField {...params} />,
                 }}
               />
             </Box>
