@@ -36,12 +36,14 @@ const BookingForm = () => {
   const [message, setMessage] = useState<string>("");
   const [errMsg, setErrorMsg] = useState<string>("");
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   useEffect(() => {
     setIsMounted(true);
   }, []);
   useEffect(() => {
     if (isMounted) {
       const fetchAvailability = async () => {
+        setLoading(true);
         try {
           const response = await axios.get<string[]>(
             `https://restaurant-bookings-api.onrender.com/api/availability`
@@ -50,6 +52,8 @@ const BookingForm = () => {
         } catch (error) {
           console.error("Error fetching availability", error);
           setAvailableSlots([]);
+        } finally {
+          setLoading(false);
         }
       };
 
@@ -140,12 +144,16 @@ const BookingForm = () => {
                 displayEmpty
                 sx={{ width: "100%", marginTop: "10px" }}
               >
-                <MenuItem disabled>Select a time slot</MenuItem>
-                {availableSlots.map((slot, index) => (
-                  <MenuItem key={index} value={slot}>
-                    {slot}
-                  </MenuItem>
-                ))}
+                {loading && <MenuItem disabled>Loading time slots...</MenuItem>}
+                {!loading && availableSlots.length === 0 && (
+                  <MenuItem disabled>No time slots available</MenuItem>
+                )}
+                {!loading &&
+                  availableSlots.map((slot, index) => (
+                    <MenuItem key={index} value={slot}>
+                      {slot}
+                    </MenuItem>
+                  ))}
               </Select>
             </FormControl>
 
